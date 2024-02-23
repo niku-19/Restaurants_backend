@@ -212,22 +212,17 @@ export const getRestaurantsByLocation = async (req, res) => {
   try {
     const city = req.query.city.split("%").join(" ");
     const address = req.query.address.split("%").join(" ");
-    console.log(city,address)
 
-    if(city === undefined || address === undefined) {
+    if (city === undefined || address === undefined) {
       return res.status(404).json({
-        status : "fail",
+        status: "fail",
         message: "Location has missing feild city or address!",
-        data : null
-      })
+        data: null,
+      });
     }
 
-
     const found = await restaurantModel.findOne({
-      $or: [
-        { city: city },
-        { address: address }
-      ]    
+      $or: [{ city: city }, { address: address }],
     });
 
     if (!found) {
@@ -274,8 +269,8 @@ export const getRestaurantsByRating = async (req, res) => {
       });
     }
 
-    const found = await restaurantModel.findOne({
-      rating: { $gte: 0, $lte: 5 },
+    const found = await restaurantModel.find({
+      rating: { $gte: rating },
     });
 
     if (!found) {
@@ -505,7 +500,7 @@ export const getUserReviewsForRestaurant = async (req, res) => {
 
     const found = await restaurantModel.findById(restaurantId);
 
-    if (!found) {
+    if (found.reviews.length < 1) {
       return res.status(404).json({
         status: "fail",
         message: "Restaurant not found",
