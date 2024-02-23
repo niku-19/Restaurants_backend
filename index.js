@@ -11,4 +11,6 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => res.send("Welcome to the Restaurant API"));
 app.use("/api/v1", router);
 
+// app.res("*",)
+
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

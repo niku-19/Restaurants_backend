@@ -212,8 +212,23 @@ export const getRestaurantsByLocation = async (req, res) => {
   try {
     const city = req.query.city.split("%").join(" ");
     const address = req.query.address.split("%").join(" ");
+    console.log(city,address)
 
-    const found = await restaurantModel.findOne({ city, address });
+    if(city === undefined || address === undefined) {
+      return res.status(404).json({
+        status : "fail",
+        message: "Location has missing feild city or address!",
+        data : null
+      })
+    }
+
+
+    const found = await restaurantModel.findOne({
+      $or: [
+        { city: city },
+        { address: address }
+      ]    
+    });
 
     if (!found) {
       return res.status(404).json({
